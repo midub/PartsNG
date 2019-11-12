@@ -1,0 +1,20 @@
+  <td>
+    {{model.name}}
+  </td>
+  <td>
+    {{model.count}}
+  </td>
+  <td>
+    {{getPackageName(model.packageId) }}
+  </td>
+  <td>
+    <a href="{{model.buyLink}}" target="_blank">buy</a>
+  </td>
+  <td>
+    {{model.position}}
+  </td>
+  <td>
+    <a (click)="OnEditClick()">Edit</a> |
+    <a (click)="OnDetailsClick()">Details</a> |
+    <a (click)="OnDeleteClick()">Delete</a>
+  </td>
