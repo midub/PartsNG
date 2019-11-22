@@ -6,9 +6,9 @@
     </button>
   </div>
   <div class="modal-body">
-    <div *ngIf="created" class="alert alert-success" role="alert">
+    <ngb-alert type="success" *ngIf="created" (close)="created = false">
       Part was added to database!
-    </div>
+    </ngb-alert>
     <form [formGroup]="form">
       <div class="form-group">
         <label class="control-label">Name</label>
@@ -62,7 +62,20 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-primary m-1 ml-3" type="button" (click)="addPartProperty()">Add Property to part</button>
+        <div class="col-12">
+          <button class="btn btn-primary m-1 ml-3" type="button" (click)="addPartProperty()">Add Property to part</button>
+        </div>
+      </div>
+      <div class="col-12 p-0">
+        <div class="form-group row">
+          <div class="col-auto form-inline">
+            <label for="newProperty" class="mr-3">New property</label>
+            <input type="text" formControlName="newProperty" class="form-control" />
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-primary" type="button" (click)="addNewProperty()">Add</button>
+          </div>
+        </div>
       </div>
     </form>
   </div>

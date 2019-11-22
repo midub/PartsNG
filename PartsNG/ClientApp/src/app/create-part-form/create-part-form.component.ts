@@ -9,6 +9,7 @@ import { Package } from '../_models/Package';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NoWhitespaceValidator } from '../_validators/no-whitespace.validator';
+import { PropertiesService } from '../_services/properties.service';
 
 @Component({
   selector: 'app-create-part-form',
@@ -35,7 +36,7 @@ export class CreatePartFormComponent implements OnInit {
 
   partPropertiesList: FormArray;
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private partsService: PartsService, private router: Router) { }
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private partsService: PartsService, private propertiesService: PropertiesService, private router: Router) { }
 
   ngOnInit() {
     this.submitted = false;
@@ -46,7 +47,8 @@ export class CreatePartFormComponent implements OnInit {
       packageId: [null],
       buyLink: ['', Validators.compose([NoWhitespaceValidator()])],
       position: ['', Validators.compose([NoWhitespaceValidator()])],
-      partProperties: this.formBuilder.array([this.createPartProperty()])
+      partProperties: this.formBuilder.array([this.createPartProperty()]),
+      newProperty: ['']
     });
 
     this.form.valueChanges
@@ -95,7 +97,7 @@ export class CreatePartFormComponent implements OnInit {
 
   createPartProperty(): FormGroup {
     return this.formBuilder.group({
-      partId: [null],
+      partId: [0],
       propertyId: [0, Validators.compose([Validators.required, Validators.min(1)])],
       value: [null, Validators.compose([Validators.required])]
     })
@@ -113,5 +115,19 @@ export class CreatePartFormComponent implements OnInit {
     this.partPropertiesList = this.form.get('partProperties') as FormArray;
     const formGroup = this.partPropertiesList.controls[index] as FormGroup;
     return formGroup;
+  }
+
+  addNewProperty() {
+    var property = new Property();
+    property.name = this.form.value.newProperty;
+    console.log(this.form.value);
+    this.propertiesService.postProperty(property).subscribe(
+      result => {
+        this.properties.push(result);
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 }

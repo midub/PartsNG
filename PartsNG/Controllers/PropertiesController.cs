@@ -78,12 +78,17 @@ namespace PartsNG.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Property>> PostProperty(Property @Property)
+        public async Task<ActionResult<Property>> PostProperty(Property Property)
         {
-            _context.Properties.Add(@Property);
+            if (Property.Name == "" && Property.Name.Length < 3)
+                return BadRequest();
+            var count = await _context.Properties.CountAsync(p => p.Name == Property.Name);
+            if (count > 0)
+                return BadRequest();
+            _context.Properties.Add(Property);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProperty", new { id = @Property.Id }, @Property);
+            return CreatedAtAction("GetProperty", new { id = @Property.Id }, Property);
         }
 
         // DELETE: api/Properties/5

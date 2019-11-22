@@ -14,6 +14,8 @@ namespace PartsNG.Models
 
         public int? PackageId { get; set; }
 
+        [JsonIgnore]
+
         public Package Package { get; set; }
 
         public string BuyLink { get; set; }

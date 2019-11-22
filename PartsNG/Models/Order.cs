@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -11,6 +12,7 @@ namespace PartsNG.Models
 
         public int PartId { get; set; }
 
+        [JsonIgnore]
         public Part Part { get; set; }
 
         public int Count { get; set; }

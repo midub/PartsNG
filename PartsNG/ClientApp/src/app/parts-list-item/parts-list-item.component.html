@@ -8,7 +8,7 @@
     {{getPackageName(model.packageId) }}
   </td>
   <td>
-    <a href="{{model.buyLink}}" target="_blank">buy</a>
+    <a *ngIf="model.buyLink != ''" href="{{model.buyLink}}" target="_blank">buy</a>
   </td>
   <td>
     {{model.position}}
