@@ -49,7 +49,7 @@ export class EditPartFormComponent implements OnInit {
       newProperty: ['']
     });
 
-    this.partPropertiesList = this.form.get('partProperties') as FormArray;
+    this.partPropertiesList = this.form.get("partProperties") as FormArray;
 
     this.removePartProperty(0);
 
@@ -59,7 +59,7 @@ export class EditPartFormComponent implements OnInit {
   }
 
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', centered: true, size: 'lg', scrollable: true }).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", centered: true, size: "lg", scrollable: true }).result.then((result) => {
       this.edited = false;
     }, (reason) => {
 
@@ -115,7 +115,7 @@ export class EditPartFormComponent implements OnInit {
   }
 
   getPartPropertyFormGroup(index: string | number): FormGroup {
-    this.partPropertiesList = this.form.get('partProperties') as FormArray;
+    this.partPropertiesList = this.form.get("partProperties") as FormArray;
     const formGroup = this.partPropertiesList.controls[index] as FormGroup;
     return formGroup;
   }

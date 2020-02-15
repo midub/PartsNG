@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PartsNG.Data;
 using PartsNG.Models;
 using PartsNG.Models.Extensions;
@@ -7,6 +6,7 @@ using PartsNG.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsNG.Controllers
 {
@@ -51,34 +51,16 @@ namespace PartsNG.Controllers
             return package.ToViewModel();
         }
 
-        // PUT: api/Packages/5
+        // PUT: api/Packages/
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPackage(int id, PackageViewModel package)
+        [HttpPut("")]
+        public async Task<IActionResult> PutPackage(PackageViewModel packageViewModel)
         {
-            if (id != package.Id)
-            {
-                return BadRequest();
-            }
+            var package = await _context.Packages.FindAsync(packageViewModel.Id);
+            _context.Packages.Update(package.AssignToModel(packageViewModel));
 
-            _context.Entry(package).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PackageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

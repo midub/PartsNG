@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using PartsNG.ViewModels;
+﻿using PartsNG.ViewModels;
+using System.Linq;
 
 namespace PartsNG.Models.Extensions
 {

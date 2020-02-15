@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PartsNG.Data;
 using PartsNG.Models;
+using PartsNG.Models.Extensions;
+using PartsNG.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PartsNG.Models.Extensions;
-using PartsNG.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsNG.Controllers
 {

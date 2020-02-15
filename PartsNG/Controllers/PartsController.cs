@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PartsNG.Data;
 using PartsNG.Models;
 using PartsNG.Models.Extensions;
@@ -7,6 +6,7 @@ using PartsNG.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsNG.Controllers
 {
@@ -68,7 +68,7 @@ namespace PartsNG.Controllers
             _context.PartProperties.RemoveRange(
                 _context.PartProperties.Where(pp => pp.PartId == part.Id)
                 );
-            await _context.AddRangeAsync(partProperties);
+            await _context.PartProperties.AddRangeAsync(partProperties);
 
             await _context.SaveChangesAsync();
 
@@ -83,7 +83,7 @@ namespace PartsNG.Controllers
         {
             var part = new Part().AssignToModel(partViewModel);
             var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p)).ToList();
-            
+
             await _context.Parts.AddAsync(part);
             await _context.SaveChangesAsync();
 
@@ -92,8 +92,8 @@ namespace PartsNG.Controllers
                 partProperty.PartId = part.Id;
             }
 
-            await _context.AddRangeAsync(partProperties);
-            
+            await _context.PartProperties.AddRangeAsync(partProperties);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPart", new { id = part.Id }, part);
