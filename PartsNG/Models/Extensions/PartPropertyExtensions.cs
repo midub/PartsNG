@@ -17,6 +17,8 @@ namespace PartsNG.Models.Extensions
 
         public static PartProperty AssignToModel(this PartProperty partProperty, PartPropertyViewModel viewModel)
         {
+            partProperty.PartId = viewModel.PartId;
+            partProperty.PropertyId = viewModel.PropertyId;
             partProperty.Value = viewModel.Value;
             return partProperty;
         }

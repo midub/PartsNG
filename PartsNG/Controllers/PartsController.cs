@@ -23,11 +23,13 @@ namespace PartsNG.Controllers
 
         // GET: api/Parts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Part>>> GetParts()
+        public async Task<ActionResult<IEnumerable<PartViewModel>>> GetParts()
         {
-            var parts = await _context.Parts
+            var parts = (await _context.Parts
                 .Include(nameof(Part.PartProperties))
-                .ToListAsync();
+                .Include(nameof(Part.Package))
+                .Include($"{nameof(Part.PartProperties)}.{nameof(PartProperty.Property)}")
+                .ToListAsync()).Select(p => p.ToViewModel()).ToArray();
             return parts;
         }
 
@@ -35,7 +37,11 @@ namespace PartsNG.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PartViewModel>> GetPart(int id)
         {
-            var part = await _context.Parts.FindAsync(id);
+            var part = await _context.Parts
+                .Include(nameof(Part.PartProperties))
+                .Include(nameof(Part.Package))
+                .Include($"{nameof(Part.PartProperties)}.{nameof(PartProperty.Property)}")
+                .FirstAsync(p => p.Id == id);
 
             if (part == null)
             {
@@ -53,12 +59,18 @@ namespace PartsNG.Controllers
         {
             var part = await _context.Parts.FindAsync(partViewModel.Id);
             part.AssignToModel(partViewModel);
-            var partProperties = partViewModel.Properties.Select(p => new PartProperty().AssignToModel(p));
+            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p));
+            foreach (var partProperty in partProperties)
+            {
+                partProperty.PartId = part.Id;
+            }
             _context.Parts.Update(part);
             _context.PartProperties.RemoveRange(
                 _context.PartProperties.Where(pp => pp.PartId == part.Id)
                 );
-            await _context.AddRangeAsync(partProperties);
+            if(partProperties != null)
+                await _context.AddRangeAsync(partProperties);
+
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -71,9 +83,19 @@ namespace PartsNG.Controllers
         public async Task<ActionResult<PartViewModel>> PostPart(PartViewModel partViewModel)
         {
             var part = new Part().AssignToModel(partViewModel);
-
+            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p));
+            
             await _context.Parts.AddAsync(part);
+            await _context.SaveChangesAsync();
 
+            foreach (var partProperty in partProperties)
+            {
+                partProperty.PartId = part.Id;
+            }
+
+            if(partProperties != null)
+                await _context.AddRangeAsync(partProperties);
+            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPart", new { id = part.Id }, part);

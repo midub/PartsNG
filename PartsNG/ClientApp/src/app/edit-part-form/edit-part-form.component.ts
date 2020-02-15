@@ -53,7 +53,8 @@ export class EditPartFormComponent implements OnInit {
 
     this.removePartProperty(0);
 
-    this.part.partProperties.forEach(pp => this.addPartProperty(this.createPartProperty(pp.propertyId, pp.value)));
+    if(this.part.partProperties)
+      this.part.partProperties.forEach(pp => this.addPartProperty(this.createPartProperty(pp.propertyId, pp.value)));
     this.loading = false;
   }
 
@@ -73,6 +74,8 @@ export class EditPartFormComponent implements OnInit {
     this.loading = true;
     var data = this.form.value;
     data.id = this.part.id;
+    data.packageId = +data.packageId;
+    data.partProperties.forEach(pp => pp.propertyId = +pp.propertyId);
 
     this.partsService.putPart(data as Part).subscribe(
       result => {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PartsNG.ViewModels
 {
@@ -23,7 +24,12 @@ namespace PartsNG.ViewModels
         public int Count { get; set; }
 
         /// <summary>
-        /// Package of part
+        /// Identifier of package
+        /// </summary>
+        public int PackageId { get; set; }
+
+        /// <summary>
+        /// ViewModel of package
         /// </summary>
         public PackageViewModel Package { get; set; }
 
@@ -40,6 +46,6 @@ namespace PartsNG.ViewModels
         /// <summary>
         /// Associated properties with the part
         /// </summary>
-        public ICollection<PartPropertyViewModel> Properties { get; set; }
+        public ICollection<PartPropertyViewModel> PartProperties { get; set; }
     }
 }

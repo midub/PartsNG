@@ -26,7 +26,7 @@
       <div class="form-group">
         <label class="control-label">Package</label>
         <select formControlName="packageId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.packageId.errors }">
-          <option [ngValue]="null">Undefined</option>
+          <option [ngValue]="0">Undefined</option>
           <option *ngFor="let package of packages; let i = index;" [value]="package.id">{{package.name}}</option>
         </select>
         <span *ngIf="submitted && f.packageId.errors" class="invalid-feedback">Package must be selected.</span>

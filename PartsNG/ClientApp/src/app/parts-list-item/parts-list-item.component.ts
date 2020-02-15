@@ -16,8 +16,10 @@ export class PartsListItemComponent implements OnInit {
   @Input() properties: Property[];
 
   getPackageName(): string {
-    if (this.packages && this.packages.find(p => p.id == this.model.packageId))
-      return this.packages.find(p => p.id == this.model.packageId).name;
+    if (this.model.package == null)
+      return "";
+    else
+      return this.model.package.name;
   }
 
   constructor() { }

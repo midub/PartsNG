@@ -11,9 +11,10 @@ namespace PartsNG.Models.Extensions
             BuyLink = part.BuyLink,
             Count = part.Count,
             Name = part.Name,
+            PackageId = part.PackageId ?? 0,
             Package = part.Package?.ToViewModel(),
             Position = part.Position,
-            Properties = part.PartProperties?.Select(pp => pp.ToViewModel()).ToList()
+            PartProperties = part.PartProperties?.Select(pp => pp.ToViewModel()).ToList()
         };
 
         public static Part AssignToModel(this Part part, PartViewModel viewModel)
@@ -22,7 +23,8 @@ namespace PartsNG.Models.Extensions
             part.Count = viewModel.Count;
             part.Name = viewModel.Name;
             part.Position = viewModel.Position;
-            part.PackageId = viewModel.Package.Id;
+            if (viewModel.PackageId > 0)
+                part.PackageId = viewModel.PackageId;
             return part;
         }
     }
