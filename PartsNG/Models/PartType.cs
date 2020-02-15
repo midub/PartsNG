@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace PartsNG.Models
+﻿namespace PartsNG.Models
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    /// <summary>
+    /// Type of part
+    /// </summary>
     public enum PartType
     {
         None = 0,

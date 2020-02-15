@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PartsNG.Models
 {
+    /// <summary>
+    /// User domain entity
+    /// </summary>
     public class ApplicationUser : IdentityUser
     {
+        /// <summary>
+        /// Orders associated with user
+        /// </summary>
         public ICollection<Order> Orders { get; set; }
 
     }

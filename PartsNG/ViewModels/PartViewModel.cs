@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace PartsNG.Models
+namespace PartsNG.ViewModels
 {
     /// <summary>
-    /// Part domain entity
+    /// Transport entity of Part
     /// </summary>
-    public class Part
+    public class PartViewModel
     {
         /// <summary>
         /// Unique identifier
@@ -18,22 +18,17 @@ namespace PartsNG.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Currently available part count
+        /// Current count of part
         /// </summary>
         public int Count { get; set; }
 
         /// <summary>
-        /// Id of part's package
+        /// Package of part
         /// </summary>
-        public int? PackageId { get; set; }
+        public PackageViewModel Package { get; set; }
 
         /// <summary>
-        /// Associated Package entity
-        /// </summary>
-        public Package Package { get; set; }
-
-        /// <summary>
-        /// Where you can buy the part
+        /// Link where part can be bought
         /// </summary>
         public string BuyLink { get; set; }
 
@@ -43,9 +38,8 @@ namespace PartsNG.Models
         public string Position { get; set; }
 
         /// <summary>
-        /// List of associated PartProperties
+        /// Associated properties with the part
         /// </summary>
-        public ICollection<PartProperty> PartProperties { get; set; }
-
+        public ICollection<PartPropertyViewModel> Properties { get; set; }
     }
 }

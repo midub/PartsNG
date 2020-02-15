@@ -1,9 +1,12 @@
-﻿namespace PartsNG.Models
+﻿using PartsNG.Models;
+using System.Text.Json.Serialization;
+
+namespace PartsNG.ViewModels
 {
     /// <summary>
-    /// Order domain entity
+    /// Transport entity of Package
     /// </summary>
-    public class Package
+    public class PackageViewModel
     {
         /// <summary>
         /// Unique identifier
@@ -18,7 +21,7 @@
         /// <summary>
         /// Type of part (SMD, THD etc.)
         /// </summary>
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public PartType PartType { get; set; }
-
     }
 }

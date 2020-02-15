@@ -1,9 +1,9 @@
-﻿namespace PartsNG.Models
+﻿namespace PartsNG.ViewModels
 {
     /// <summary>
-    /// Order domain entity
+    /// Transport entity of Property
     /// </summary>
-    public class Package
+    public class PropertyViewModel
     {
         /// <summary>
         /// Unique identifier
@@ -11,14 +11,9 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Name of package
+        /// Name of property
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Type of part (SMD, THD etc.)
-        /// </summary>
-        public PartType PartType { get; set; }
 
     }
 }

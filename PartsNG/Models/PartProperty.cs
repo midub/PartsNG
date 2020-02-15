@@ -1,21 +1,34 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PartsNG.Models
+﻿namespace PartsNG.Models
 {
+    /// <summary>
+    /// PartProperty domain join entity
+    /// </summary>
     public class PartProperty
     {
+        /// <summary>
+        /// Identifier of part
+        /// </summary>
         public int PartId { get; set; }
 
-        [JsonIgnore]
+        /// <summary>
+        /// Associated Part entity
+        /// </summary>
         public Part Part { get; set; }
+
+        /// <summary>
+        /// Identifier of property
+        /// </summary>
         public int PropertyId { get; set; }
 
-        [JsonIgnore]
+        /// <summary>
+        /// Associated Property entity
+        /// </summary>
         public Property Property { get; set; }
-        public double Value { get; set; }
+
+        /// <summary>
+        /// Value
+        /// </summary>
+        public string Value { get; set; }
 
     }
 }
