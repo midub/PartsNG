@@ -59,7 +59,7 @@ namespace PartsNG.Controllers
         {
             var part = await _context.Parts.FindAsync(partViewModel.Id);
             part.AssignToModel(partViewModel);
-            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p));
+            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p)).ToList();
             foreach (var partProperty in partProperties)
             {
                 partProperty.PartId = part.Id;
@@ -68,8 +68,7 @@ namespace PartsNG.Controllers
             _context.PartProperties.RemoveRange(
                 _context.PartProperties.Where(pp => pp.PartId == part.Id)
                 );
-            if(partProperties != null)
-                await _context.AddRangeAsync(partProperties);
+            await _context.AddRangeAsync(partProperties);
 
             await _context.SaveChangesAsync();
 
@@ -83,7 +82,7 @@ namespace PartsNG.Controllers
         public async Task<ActionResult<PartViewModel>> PostPart(PartViewModel partViewModel)
         {
             var part = new Part().AssignToModel(partViewModel);
-            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p));
+            var partProperties = partViewModel.PartProperties?.Select(p => new PartProperty().AssignToModel(p)).ToList();
             
             await _context.Parts.AddAsync(part);
             await _context.SaveChangesAsync();
@@ -93,8 +92,7 @@ namespace PartsNG.Controllers
                 partProperty.PartId = part.Id;
             }
 
-            if(partProperties != null)
-                await _context.AddRangeAsync(partProperties);
+            await _context.AddRangeAsync(partProperties);
             
             await _context.SaveChangesAsync();
 
