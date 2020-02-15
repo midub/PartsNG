@@ -1,4 +1,5 @@
-﻿using PartsNG.ViewModels;
+﻿using System.Linq;
+using PartsNG.ViewModels;
 
 namespace PartsNG.Models.Extensions
 {
@@ -8,7 +9,13 @@ namespace PartsNG.Models.Extensions
         {
             Id = user.Id,
             UserName = user.UserName,
-
+            Orders = user.Orders.Select(o => o.ToViewModel()).ToList()
         };
+
+        public static ApplicationUser AssignToModel(this ApplicationUser user, UserViewModel viewModel)
+        {
+            user.UserName = viewModel.UserName;
+            return user;
+        }
     }
 }

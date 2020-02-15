@@ -5,7 +5,7 @@
     {{model.count}}
   </td>
   <td>
-    {{getPackageName(model.packageId) }}
+    {{getPackageName()}}
   </td>
   <td>
     <a *ngIf="model.buyLink != ''" href="{{model.buyLink}}" target="_blank">buy</a>
@@ -13,8 +13,8 @@
   <td>
     {{model.position}}
   </td>
-  <td>
-    <a (click)="OnEditClick()">Edit</a> |
+  <td class="btn-group">
+    <app-edit-part-form [(parts)]="parts" [(part)]="model" [(packages)]="packages" [(properties)]="properties"></app-edit-part-form> |
     <a (click)="OnDetailsClick()">Details</a> |
     <a (click)="OnDeleteClick()">Delete</a>
   </td>

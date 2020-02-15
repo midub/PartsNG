@@ -1,0 +1,92 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit part</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ngb-alert type="success" *ngIf="edited" (close)="edited = false">
+      Part was edited!
+    </ngb-alert>
+    <form [formGroup]="form">
+      <div class="form-row">
+        <div class="form-group col-xs-12 col-md-10">
+          <label class="control-label">Name</label>
+          <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+          <span *ngIf="submitted && f.name.errors?.required" class="invalid-feedback">Part must have a name.</span>
+          <span *ngIf="submitted && f.name.errors?.whitespace" class="invalid-feedback">Remove unnecessary spaces.</span>
+        </div>
+        <div class="form-group col-xs-12 col-md-2">
+          <label class="control-label">Count</label>
+          <input type="number" formControlName="count" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.count.errors }" />
+          <span *ngIf="submitted && f.count.errors" class="invalid-feedback">Count must be set.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Package</label>
+        <select formControlName="packageId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.packageId.errors }">
+          <option [ngValue]="null">Undefined</option>
+          <option *ngFor="let package of packages; let i = index;" [value]="package.id">{{package.name}}</option>
+        </select>
+        <span *ngIf="submitted && f.packageId.errors" class="invalid-feedback">Package must be selected.</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Link to buy</label>
+        <input formControlName="buyLink" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.buyLink.errors }" />
+        <span *ngIf="submitted && f.buyLink.errors" class="invalid-feedback">Link to buy must be an Url.</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Position</label>
+        <input formControlName="position" class="form-control" />
+      </div>
+      <div class="row" formArrayName="partProperties">
+        <h6 class="pl-3">Properties</h6>
+        <div class="col-12" *ngFor="let partProperty of partPropertiesFormGroup.controls; let i = index;">
+          <div formGroupName="{{i}}" class="form-row align-items-center px-1 col-12 float-right">
+            <div class="form-group col-md-4 pr-0">
+              <select class="form-control" formControlName="propertyId" type="text">
+                <option value="0">Select Property type...</option>
+                <option *ngFor="let property of properties" value="{{property.id}}">{{property.name}}</option>
+              </select>
+              <span class="invalid-feedback" *ngIf="getPartPropertyFormGroup(i).controls['propertyId'].touched && getPartPropertyFormGroup(i).controls['propertyId'].hasError('required')">
+                Property type must be selected.
+              </span>
+            </div>
+            <div class="form-group col-md-6">
+              <input class="form-control" type="text" formControlName="value" value="" placeholder="Value" />
+              <span class="invalid-feedback" *ngIf="getPartPropertyFormGroup(i).controls['value'].touched && getPartPropertyFormGroup(i).controls['value'].hasError('required')">
+                Value must be set.
+              </span>
+            </div>
+            <div class="form-group col-md-2 text-left">
+              <button class="form-control btn btn-danger" type="button" (click)="removePartProperty(i)">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary m-1 ml-3" type="button" (click)="addPartProperty()">Add Property to part</button>
+        </div>
+      </div>
+      <div class="col-12 p-0">
+        <div class="form-group row">
+          <div class="col-auto form-inline">
+            <label for="newProperty" class="mr-3">New property</label>
+            <input type="text" formControlName="newProperty" class="form-control" />
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-primary" type="button" (click)="addNewProperty()">Add</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button [disabled]="loading" type="button" class="btn btn-light" (click)="cancel(modal)">Cancel</button>
+    <button [disabled]="loading" type="button" class="btn btn-outline-dark" (click)="edit(modal)">Edit</button>
+  </div>
+</ng-template>
+
+<div class="text-center">
+  <button class="btn btn-outline-primary mx-1" (click)="open(content)">Edit</button>
+</div>

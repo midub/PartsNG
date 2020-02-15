@@ -11,5 +11,11 @@ namespace PartsNG.Models.Extensions
             Part = order.Part?.ToViewModel(),
             User = order.User?.ToViewModel()
         };
+
+        public static Order AssignToModel(this Order order, OrderViewModel viewModel)
+        {
+            order.Count = viewModel.Count;
+            return order;
+        }
     }
 }

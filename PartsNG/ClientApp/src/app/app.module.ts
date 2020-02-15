@@ -17,6 +17,7 @@ import { PartsComponent } from './parts/parts.component';
 import { PartsListItemComponent } from './parts-list-item/parts-list-item.component';
 import { CreatePartFormComponent } from './create-part-form/create-part-form.component';
 import { CreatePackageFormComponent } from './create-package-form/create-package-form.component';
+import { EditPartFormComponent } from './edit-part-form/edit-part-form.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CreatePackageFormComponent } from './create-package-form/create-package
     PartsComponent,
     PartsListItemComponent,
     CreatePartFormComponent,
-    CreatePackageFormComponent
+    CreatePackageFormComponent,
+    EditPartFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

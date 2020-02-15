@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PartsNG.Data;
 using PartsNG.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PartsNG.Models.Extensions;
+using PartsNG.ViewModels;
 
 namespace PartsNG.Controllers
 {
@@ -30,46 +30,30 @@ namespace PartsNG.Controllers
 
         // GET: api/Properties/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Property>> GetProperty(int id)
+        public async Task<ActionResult<PropertyViewModel>> GetProperty(int id)
         {
-            var @Property = await _context.Properties.FindAsync(id);
+            var property = await _context.Properties.FindAsync(id);
 
-            if (@Property == null)
+            if (property == null)
             {
                 return NotFound();
             }
 
-            return @Property;
+            return property.ToViewModel();
         }
 
         // PUT: api/Properties/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProperty(int id, Property @Property)
+        public async Task<IActionResult> PutProperty(PropertyViewModel propertyViewModel)
         {
-            if (id != @Property.Id)
-            {
-                return BadRequest();
-            }
+            var property = await _context.Properties.FindAsync(propertyViewModel.Id);
+            property = property.AssignToModel(propertyViewModel);
 
-            _context.Entry(@Property).State = EntityState.Modified;
+            _context.Properties.Update(property);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PropertyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -78,33 +62,37 @@ namespace PartsNG.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Property>> PostProperty(Property Property)
+        public async Task<ActionResult<PropertyViewModel>> PostProperty(PropertyViewModel propertyViewModel)
         {
-            if (Property.Name == "" && Property.Name.Length < 3)
+            if (propertyViewModel.Name == "" && propertyViewModel.Name.Length < 3)
                 return BadRequest();
-            var count = await _context.Properties.CountAsync(p => p.Name == Property.Name);
+
+            var count = await _context.Properties.CountAsync(p => p.Name == propertyViewModel.Name);
             if (count > 0)
                 return BadRequest();
-            _context.Properties.Add(Property);
+
+            var property = new Property().AssignToModel(propertyViewModel);
+            _context.Properties.Add(property);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProperty", new { id = @Property.Id }, Property);
+            return CreatedAtAction("GetProperty", new { id = property.Id }, property);
         }
 
         // DELETE: api/Properties/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Property>> DeleteProperty(int id)
         {
-            var @Property = await _context.Properties.FindAsync(id);
-            if (@Property == null)
+            var property = await _context.Properties.FindAsync(id);
+            if (property == null)
             {
                 return NotFound();
             }
 
-            _context.Properties.Remove(@Property);
+            _context.Properties.Remove(property);
             await _context.SaveChangesAsync();
 
-            return @Property;
+            return Ok();
         }
 
         private bool PropertyExists(int id)

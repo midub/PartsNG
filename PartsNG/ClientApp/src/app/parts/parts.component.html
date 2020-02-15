@@ -27,7 +27,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr part *ngFor="let part of parts; let i = index;" [model]="part" [packages]="packages"></tr>
+    <tr partListItem *ngFor="let part of parts; let i = index;" [(model)]="part" [(parts)]="parts" [(packages)]="packages" [(properties)]="properties"></tr>
   </tbody>
 </table>
 

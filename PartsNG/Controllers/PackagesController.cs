@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PartsNG.Data;
 using PartsNG.Models;
+using PartsNG.Models.Extensions;
+using PartsNG.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,45 +23,46 @@ namespace PartsNG.Controllers
 
         // GET: api/Packages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Package>>> GetPackages([FromQuery]PartType[] types)
+        public async Task<ActionResult<IEnumerable<PackageViewModel>>> GetPackages([FromQuery]PartType[] types)
         {
-            if(types.Count() == 0)
-                return await _context.Packages
+            ICollection<Package> packages;
+            if (types.Count() == 0)
+                packages = await _context.Packages
                     .OrderByDescending(p => p.Name).ToListAsync();
             else
             {
-                return await _context.Packages
+                packages = await _context.Packages
                     .Where(p => types.Contains(p.PartType))
                     .OrderByDescending(p => p.Name).ToListAsync();
             }
+
+            return packages.Select(p => p.ToViewModel()).ToArray();
         }
 
         // GET: api/Packages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Package>> GetPackage(int id)
+        public async Task<ActionResult<PackageViewModel>> GetPackage(int id)
         {
-            var Package = await _context.Packages.FindAsync(id);
+            var package = await _context.Packages.FindAsync(id);
 
-            if (Package == null)
-            {
+            if (package == null)
                 return NotFound();
-            }
 
-            return Package;
+            return package.ToViewModel();
         }
 
         // PUT: api/Packages/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPackage(int id, Package Package)
+        public async Task<IActionResult> PutPackage(int id, PackageViewModel package)
         {
-            if (id != Package.Id)
+            if (id != package.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Package).State = EntityState.Modified;
+            _context.Entry(package).State = EntityState.Modified;
 
             try
             {
@@ -84,28 +87,34 @@ namespace PartsNG.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Package>> PostPackage(Package Package)
+        public async Task<ActionResult<Package>> PostPackage(PackageViewModel packageViewModel)
         {
-            _context.Packages.Add(Package);
+            var package = await _context.Packages.FindAsync(packageViewModel.Id);
+            package = (package ?? new Package()).AssignToModel(packageViewModel);
+            if (package.Id == 0)
+                _context.Packages.Add(package);
+            else
+                _context.Packages.Update(package);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPackage", new { id = Package.Id }, Package);
+            return CreatedAtAction("GetPackage", new { id = package.Id }, package);
         }
 
         // DELETE: api/Packages/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Package>> DeletePackage(int id)
+        public async Task<ActionResult> DeletePackage(int id)
         {
-            var Package = await _context.Packages.FindAsync(id);
-            if (Package == null)
+            var package = await _context.Packages.FindAsync(id);
+            if (package == null)
             {
                 return NotFound();
             }
 
-            _context.Packages.Remove(Package);
+            _context.Packages.Remove(package);
             await _context.SaveChangesAsync();
 
-            return Package;
+            return Ok();
         }
 
         private bool PackageExists(int id)

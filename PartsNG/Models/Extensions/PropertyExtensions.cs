@@ -9,5 +9,11 @@ namespace PartsNG.Models.Extensions
             Id = property.Id,
             Name = property.Name
         };
+
+        public static Property AssignToModel(this Property property, PropertyViewModel viewModel)
+        {
+            property.Name = viewModel.Name;
+            return property;
+        }
     }
 }

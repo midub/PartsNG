@@ -3,6 +3,7 @@ import { Property } from "./Property";
 
 export class PartProperty {
   part: Part;
-  Property: Property;
-  value: number;
+  propertyId: number;
+  property: Property;
+  value: string;
 }

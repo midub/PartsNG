@@ -51,13 +51,7 @@ export class CreatePartFormComponent implements OnInit {
       newProperty: ['']
     });
 
-    this.form.valueChanges
-      .subscribe((value) => {
-        value.name = value.name.trim();
-        return value;
-      });
-
-    this.partPropertiesList = this.form.get('properties') as FormArray;
+    this.partPropertiesList = this.form.get('partProperties') as FormArray;
   }
 
   open(content) {

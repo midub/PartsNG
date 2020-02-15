@@ -13,7 +13,17 @@ namespace PartsNG.Models.Extensions
             Name = part.Name,
             Package = part.Package?.ToViewModel(),
             Position = part.Position,
-            Properties = part.PartProperties?.Select(pp => pp.Property?.ToViewModel()).ToList()
+            Properties = part.PartProperties?.Select(pp => pp.ToViewModel()).ToList()
         };
+
+        public static Part AssignToModel(this Part part, PartViewModel viewModel)
+        {
+            part.BuyLink = viewModel.BuyLink;
+            part.Count = viewModel.Count;
+            part.Name = viewModel.Name;
+            part.Position = viewModel.Position;
+            part.PackageId = viewModel.Package.Id;
+            return part;
+        }
     }
 }

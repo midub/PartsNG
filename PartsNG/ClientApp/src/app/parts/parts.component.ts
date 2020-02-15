@@ -28,12 +28,6 @@ export class PartsComponent implements OnInit {
   constructor(private partsService: PartsService, private propertiesService: PropertiesService, private packagesService: PackagesService) { }
 
   ngOnInit() {
-    this.partsService.getParts().subscribe(
-      result => {
-        this.parts = result;
-        this.collectionSize = this.parts.length;
-      },
-      error => console.error(error));
     this.propertiesService.getProperties().subscribe(
       result => {
         this.properties = result;
@@ -44,6 +38,12 @@ export class PartsComponent implements OnInit {
         this.packages = result;
       },
       error => console.log(error));
+    this.partsService.getParts().subscribe(
+      result => {
+        this.parts = result;
+        this.collectionSize = this.parts.length;
+      },
+      error => console.error(error));
   }
 
 }
